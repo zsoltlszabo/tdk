@@ -11,13 +11,7 @@ def assign(list_of_states: tuple, list_of_populations: tuple, number_of_reps: in
     # We will be working with the states list. It contains the following data for each state:
     # [0] population
     # [1] assigned representatives (every state starts with one)
-    states = [
-        [
-            list_of_populations[i],
-            1,
-        ]
-        for i in range(NUMBER_OF_STATES)
-    ]
+    states = [[list_of_populations[i], 1] for i in range(NUMBER_OF_STATES)]
     for i in range(number_of_reps - NUMBER_OF_STATES):
         current_multiplied_values = [] # contains the populations multiplied with the correct values for the current iteration
         for k in states:  # multiplying each state's population with the correct number
