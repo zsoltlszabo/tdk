@@ -2,24 +2,30 @@
 
 from math import sqrt
 
-
+# Let's start by defining the function. We will request the list of states, their respective populations as tuples, and the number of representatives to assign as an integer.
 def assign(list_of_states: tuple, list_of_populations: tuple, number_of_reps: int):
-    # Declaring variables
+    # We will store the number of states in a variable.
     NUMBER_OF_STATES = len(list_of_states)
-    # contains the indexes belonging to each state
+    # We will be working with indexes of states instead of the names. To do this, we will create a dictionary that will map the indexes to the names.
     STATE_KEYS = {i: list_of_states[i] for i in range(NUMBER_OF_STATES)}
-    # We will be working with the states list. It contains the following data for each state:
-    # [0] population
-    # [1] assigned representatives (every state starts with one)
+    # We will be working with the states list. It contains the following data for each state: [0] population, [1] assigned representatives (every state starts with one)
     states = [[list_of_populations[i], 1] for i in range(NUMBER_OF_STATES)]
+    # We will create a for loop which will be executed until all the representatives are assigned. As every state is assigned one representative at the start, we will only need to assign the remaining ones.
     for i in range(number_of_reps - NUMBER_OF_STATES):
-        current_multiplied_values = [] # contains the populations multiplied with the correct values for the current iteration
-        for k in states:  # multiplying each state's population with the correct number
+        # We will create a list which will contain the populations multiplied with the correct values for the current iteration.
+        current_multiplied_values = []
+        # Next, we will create a for loop that multiplies every state with the correct multiplier.
+        for k in states:
             current_multiplied_values.append(k[0] * (1 / sqrt(k[1] * (k[1] + 1))))
-        current_max = current_multiplied_values.index(max(current_multiplied_values)) # the index of the greatest value after multiplication
-        states[current_max][1] += 1  # increment the number of representatives
+        # We will store the index of the state with the largest value after multiplication in a variable.
+        current_max = current_multiplied_values.index(max(current_multiplied_values))
+        # We will increase the number of representatives of the state with the largest value after multiplication by one.
+        states[current_max][1] += 1 
+    # We will create a dictionary, where we will store the solution.
     solution = {}
+    # We will create a for loop that will be executed for every state.
     for i in range(NUMBER_OF_STATES):
+        # We will add the state to the solution dictionary, with the number of representatives as the value.
         solution.update({STATE_KEYS.get(i): states[i][1]})
     return solution
 
@@ -46,11 +52,11 @@ def write_data(location: str, data: dict):
 
 def main():
     # name (and location) of the file containing the states and the populations
-    READ_LOCATION = 'census2010'
+    READ_LOCATION = 'input/eeach2011'
     # name (and location) of the file where we want to output the
     # apportionment (this will overwrite the file)
-    WRITE_LOCATION = '2010house'
-    NUMBER_OF_REPS = 435  # number of representatives to be assigned
+    WRITE_LOCATION = 'output/eea2011ch_huntington'
+    NUMBER_OF_REPS = 705  # number of representatives to be assigned
     list_of_states, list_of_populations = read_data(READ_LOCATION)
     solution = assign(list_of_states, list_of_populations, NUMBER_OF_REPS)
     write_data(WRITE_LOCATION, solution)
