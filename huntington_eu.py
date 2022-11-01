@@ -8,19 +8,26 @@ def assign(list_of_states: tuple, list_of_populations: tuple, number_of_reps: in
     NUMBER_OF_STATES = len(list_of_states)
     # We will be working with indexes of states instead of the names. To do this, we will create a dictionary that will map the indexes to the names.
     STATE_KEYS = {i: list_of_states[i] for i in range(NUMBER_OF_STATES)}
-    # We will be working with the states list. It contains the following data for each state: [0] population, [1] assigned representatives (every state starts with one)
-    states = [[list_of_populations[i], 1] for i in range(NUMBER_OF_STATES)]
-    # We will create a for loop which will be executed until all the representatives are assigned. As every state is assigned one representative at the start, we will only need to assign the remaining ones.
-    for i in range(number_of_reps - NUMBER_OF_STATES):
+    # We will be working with the states list. It contains the following data for each state: [0] population, [1] assigned representatives (every state starts with six)
+    states = [[list_of_populations[i], 6] for i in range(NUMBER_OF_STATES)]
+    # We will create a for loop which will be executed until all the representatives are assigned. As every state is assigned six representative at the start, we will only need to assign the remaining ones.
+    for i in range(number_of_reps - NUMBER_OF_STATES * 6):
         # We will create a list which will contain the populations multiplied with the correct values for the current iteration.
         current_multiplied_values = []
         # Next, we will create a for loop that multiplies every state with the correct multiplier.
         for k in states:
             current_multiplied_values.append(k[0] * (1 / sqrt(k[1] * (k[1] + 1))))
-        # We will store the index of the state with the largest value after multiplication in a variable.
-        current_max = current_multiplied_values.index(max(current_multiplied_values))
-        # We will increase the number of representatives of the state with the largest value after multiplication by one.
-        states[current_max][1] += 1 
+        # This while loop will check if a certain member state has reached the maximum amount of seats.
+        while True:
+            # We will store the index of the state with the largest value after multiplication in a variable.
+            current_max = current_multiplied_values.index(max(current_multiplied_values))
+            # If the state with the largest value already has 96 representatives, the value will be decreased to zero, thus putting the state at the end of the list.
+            if states[current_max][1] == 96:
+                current_multiplied_values[current_max] = 0
+            # If the state has fewer than 96 representatives, we will increase the number of representatives by one.
+            else:
+                states[current_max][1] += 1
+                break
     # We will create a dictionary, where we will store the solution.
     solution = {}
     # We will create a for loop that will be executed for every state.
@@ -56,7 +63,7 @@ def main():
         if i == 0:
             READ_LOCATION = v.strip()
         if i == 1:
-            WRITE_LOCATION = v.strip() + '_geometric'
+            WRITE_LOCATION = v.strip() + '_geometric_degressive'
         if i == 2:
             NUMBER_OF_REPS = int(v.strip())
     f.close()
